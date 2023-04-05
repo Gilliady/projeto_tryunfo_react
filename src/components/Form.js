@@ -25,7 +25,7 @@ class Form extends Component {
           <Input
             type="text"
             id="name-input"
-            name="cardame"
+            name="cardName"
             value={ cardName }
             handler={ onInputChange }
           />

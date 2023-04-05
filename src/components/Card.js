@@ -13,8 +13,10 @@ class Card extends Component {
       cardRare,
       cardTrunfo,
     } = this.props;
+
     const superTrunfo = (cardTrunfo)
       ? <h3 data-testid="trunfo-card">Super Trunfo</h3> : '';
+
     return (
       <div>
         <h3 data-testid="name-card">{ cardName }</h3>

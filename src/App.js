@@ -6,9 +6,9 @@ class App extends React.Component {
   state = {
     cardName: '',
     description: '',
-    attr1: '',
-    attr2: '',
-    attr3: '',
+    attr1: 0,
+    attr2: 0,
+    attr3: 0,
     imgsrc: '',
     rare: 'normal',
     trunfo: false,
@@ -17,29 +17,34 @@ class App extends React.Component {
 
   };
 
+  buttonDisableHanlder = () => {
+    this.setState(({ cardName, description, attr1, attr2, attr3, imgsrc }) => {
+      const textInputs = cardName.length > 0
+        && imgsrc.length > 0
+        && description.length > 0;
+      const maxAttributes = 210;
+      const maxSingleAttributes = 90;
+      const attrInputs = Number(attr1) >= 0
+        && Number(attr1) <= maxSingleAttributes
+        && Number(attr2) >= 0 && Number(attr2) <= maxSingleAttributes
+        && Number(attr3) >= 0 && Number(attr3) <= maxSingleAttributes
+        && (Number(attr1) + Number(attr2) + Number(attr3)) <= maxAttributes;
+      return {
+        isSaveButtonDisabled: !(textInputs && attrInputs),
+      };
+    });
+  };
+
   onInputChange = ({ target }) => {
     if (target.name === 'trunfo') {
       this.setState({
         [target.name]: target.checked,
-      });
+      }, this.buttonDisableHanlder);
       return;
     }
     this.setState({
       [target.name]: target.value,
-    });
-    /* const { state: {
-      cardName,
-      description,
-      attr1,
-      attr2,
-      attr3,
-      imgsrc,
-    } } = this;
-    const textInputs = cardName.length > 0 && imgsrc.length > 0 && description.length > 0;
-    const attrInputs = attr1 > 0 && attr2 > 0 && attr3 > 0;
-    this.setState({
-      isSaveButtonDisabled: !((textInputs && attrInputs)),
-    }); */
+    }, this.buttonDisableHanlder);
   };
 
   onSaveButtonClick = () => {

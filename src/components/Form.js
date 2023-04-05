@@ -1,93 +1,86 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Input from './Input';
 
 class Form extends Component {
-  state = {
-    name: '',
-    description: '',
-    attr1: 0,
-    attr2: 0,
-    attr3: 0,
-    imgsrc: '',
-    rare: 'normal',
-    trunfo: false,
-  };
-
-  handlerInputChanges = ({ target: { name, value } }) => {
-    this.setState({
-      [name]: value,
-    });
-  };
-
   render() {
-    const { state:
-      { name, description, attr1, attr2, attr3, imgsrc, rare, trunfo } } = this;
+    const {
+      cardName,
+      cardDescription,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardImage,
+      cardRare,
+      cardTrunfo,
+      hasTrunfo,
+      isSaveButtonDisabled,
+      onInputChange,
+      onSaveButtonClick } = this.props;
     return (
       <form>
-        <label htmlFor="name-input" data-testid="name-input">
+        <label htmlFor="name-input">
           Nome do personagem:
           <br />
           <Input
             type="text"
             id="name-input"
-            name="name"
-            value={ name }
-            handler={ this.handlerInputChanges }
+            name="cardame"
+            value={ cardName }
+            handler={ onInputChange }
           />
         </label>
-        <label
-          htmlFor="description-input"
-          data-testid="description-input"
-        >
+        <label htmlFor="description-input">
           Descrição:
           <br />
           <textarea
             id="description-input"
             name="description"
-            value={ description }
-            onChange={ this.handlerInputChanges }
+            value={ cardDescription }
+            onChange={ onInputChange }
+            data-testid="description-input"
           />
         </label>
-        <label htmlFor="attr1-input" data-testid="attr1-input">
+        <label htmlFor="attr1-input">
           Atributo 1:
           <br />
           <Input
             type="number"
             id="attr1-input"
             name="attr1"
-            value={ attr1.toString() }
-            handler={ this.handlerInputChanges }
+            value={ cardAttr1 }
+            handler={ onInputChange }
           />
         </label>
-        <label htmlFor="attr2-input" data-testid="attr2-input">
+        <label htmlFor="attr2-input">
           Atributo 2:
           <br />
           <Input
             type="number"
             id="attr2-input"
             name="attr2"
-            value={ attr2.toString() }
-            handler={ this.handlerInputChanges }
+            value={ cardAttr2 }
+            handler={ onInputChange }
           />
         </label>
-        <label htmlFor="attr3-input" data-testid="attr3-input">
+        <label htmlFor="attr3-input">
           Atributo 3:
           <br />
           <Input
             type="number"
-            id="attr1-input"
+            id="attr3-input"
             name="attr3"
-            value={ attr3.toString() }
-            handler={ this.handlerInputChanges }
+            value={ cardAttr3 }
+            handler={ onInputChange }
           />
         </label>
-        <label htmlFor="image-input" data-testid="image-input">
+        <label htmlFor="image-input">
           <Input
             type="string"
             id="image-input"
             name="imgsrc"
-            value={ imgsrc }
-            handler={ this.handlerInputChanges }
+            value={ cardImage }
+            handler={ onInputChange }
           />
         </label>
         <label htmlFor="rare-input">
@@ -96,29 +89,53 @@ class Form extends Component {
             data-testid="rare-input"
             name="rare"
             id="rare-input"
-            onChange={ this.handlerInputChanges }
-            value={ rare }
+            onChange={ onInputChange }
+            value={ cardRare }
           >
             <option value="normal">Normal</option>
             <option value="raro">raro</option>
             <option value="muito raro">muito raro</option>
           </select>
         </label>
-        <label htmlFor="trunfo-input" data-testid="trunfo-input">
+        <label htmlFor="trunfo-input">
           Trunfo:
           {' '}
-          <Input
+          <input
             type="checkbox"
             name="trunfo"
-            value={ trunfo }
+            checked={ cardTrunfo }
             id="trunfo-input"
-            handler={ this.handlerInputChanges }
+            onChange={ onInputChange }
+            data-testid="trunfo-input"
           />
         </label>
-        <button data-testid="save-button">Salvar</button>
+        <button
+          data-testid="save-button"
+          disabled={ isSaveButtonDisabled }
+          onClick={ onSaveButtonClick }
+          name="saveBtn"
+        >
+          Salvar
+
+        </button>
       </form>
     );
   }
 }
+
+Form.propTypes = {
+  cardName: PropTypes.string.isRequired,
+  cardAttr1: PropTypes.string.isRequired,
+  cardAttr2: PropTypes.string.isRequired,
+  cardAttr3: PropTypes.string.isRequired,
+  cardDescription: PropTypes.string.isRequired,
+  cardImage: PropTypes.string.isRequired,
+  cardRare: PropTypes.string.isRequired,
+  cardTrunfo: PropTypes.bool.isRequired,
+  hasTrunfo: PropTypes.bool.isRequired,
+  isSaveButtonDisabled: PropTypes.bool.isRequired,
+  onInputChange: PropTypes.func.isRequired,
+  onSaveButtonClick: PropTypes.func.isRequired,
+};
 
 export default Form;

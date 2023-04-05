@@ -5,7 +5,14 @@ class Input extends Component {
   render() {
     const { type, name, value, id, handler } = this.props;
     return (
-      <input type={ type } name={ name } value={ value } onChange={ handler } id={ id } />
+      <input
+        type={ type }
+        name={ name }
+        value={ value }
+        onChange={ handler }
+        id={ id }
+        data-testid={ id }
+      />
     );
   }
 }

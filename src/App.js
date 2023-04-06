@@ -35,7 +35,16 @@ class App extends React.Component {
     });
   };
 
+  hasTrunfoInDeck = () => {
+    const { state: { savedCards } } = this;
+    console.log(savedCards);
+    this.setState({
+      hasTrunfo: savedCards.some(({ props }) => props.cardTrunfo),
+    });
+  };
+
   onInputChange = ({ target }) => {
+    this.hasTrunfoInDeck();
     if (target.name === 'trunfo') {
       this.setState({
         [target.name]: target.checked,
@@ -68,6 +77,7 @@ class App extends React.Component {
       cardImage={ imgsrc }
       cardRare={ rare }
       cardTrunfo={ trunfo }
+      key={ cardName }
     />);
     this.setState({
       cardName: '',
@@ -79,7 +89,7 @@ class App extends React.Component {
       rare: 'normal',
       trunfo: false,
       savedCards: cardList,
-    });
+    }, () => { this.buttonDisableHanlder(); this.hasTrunfoInDeck(); });
   };
 
   render() {

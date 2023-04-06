@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 class Card extends Component {
+  trunfo = (isTrunfo) => (isTrunfo
+    ? <h3 data-testid="trunfo-card">Super Trunfo</h3> : '');
+
   render() {
     const {
       cardName,
@@ -14,9 +17,6 @@ class Card extends Component {
       cardTrunfo,
     } = this.props;
 
-    const superTrunfo = (cardTrunfo)
-      ? <h3 data-testid="trunfo-card">Super Trunfo</h3> : '';
-
     return (
       <div>
         <h3 data-testid="name-card">{ cardName }</h3>
@@ -26,7 +26,7 @@ class Card extends Component {
         <span data-testid="attr2-card">{ Number(cardAttr2) }</span>
         <span data-testid="attr3-card">{ Number(cardAttr3) }</span>
         <h3 data-testid="rare-card">{ cardRare }</h3>
-        { superTrunfo }
+        { this.trunfo(cardTrunfo) }
       </div>
     );
   }
@@ -40,7 +40,11 @@ Card.propTypes = {
   cardImage: PropTypes.string.isRequired,
   cardName: PropTypes.string.isRequired,
   cardRare: PropTypes.string.isRequired,
-  cardTrunfo: PropTypes.bool.isRequired,
+  cardTrunfo: PropTypes.bool,
+};
+
+Card.defaultProps = {
+  cardTrunfo: false,
 };
 
 export default Card;

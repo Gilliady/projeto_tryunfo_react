@@ -3,6 +3,27 @@ import React, { Component } from 'react';
 import Input from './Input';
 
 class Form extends Component {
+  allowTrunfo = (hasTrunfo, cardTrunfo, onInputChange) => {
+    /* const { hasTrunfo, cardTrunfo, onInputChange } = this.props; */
+    const checkboxTrunfo = (
+      <label htmlFor="trunfo-input">
+        Trunfo:
+        {' '}
+        <input
+          type="checkbox"
+          name="trunfo"
+          checked={ cardTrunfo }
+          id="trunfo-input"
+          onChange={ onInputChange }
+          data-testid="trunfo-input"
+        />
+      </label>
+    );
+    return hasTrunfo
+      ? <span>Você já tem um Super Trunfo em seu baralho</span>
+      : checkboxTrunfo;
+  };
+
   render() {
     const {
       cardName,
@@ -16,7 +37,9 @@ class Form extends Component {
       hasTrunfo,
       isSaveButtonDisabled,
       onInputChange,
-      onSaveButtonClick } = this.props;
+      onSaveButtonClick,
+    } = this.props;
+
     return (
       <form>
         <label htmlFor="name-input">
@@ -97,18 +120,7 @@ class Form extends Component {
             <option value="muito raro">muito raro</option>
           </select>
         </label>
-        <label htmlFor="trunfo-input">
-          Trunfo:
-          {' '}
-          <input
-            type="checkbox"
-            name="trunfo"
-            checked={ cardTrunfo }
-            id="trunfo-input"
-            onChange={ onInputChange }
-            data-testid="trunfo-input"
-          />
-        </label>
+        {this.allowTrunfo(hasTrunfo, cardTrunfo, onInputChange)}
         <button
           type="button"
           data-testid="save-button"

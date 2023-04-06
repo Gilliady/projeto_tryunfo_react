@@ -14,7 +14,7 @@ class App extends React.Component {
     trunfo: false,
     hasTrunfo: false,
     isSaveButtonDisabled: true,
-
+    savedCards: [],
   };
 
   buttonDisableHanlder = () => {
@@ -48,7 +48,38 @@ class App extends React.Component {
   };
 
   onSaveButtonClick = () => {
-
+    const { state: { cardName,
+      description,
+      attr1,
+      attr2,
+      attr3,
+      imgsrc,
+      rare,
+      trunfo,
+      savedCards,
+    } } = this;
+    const cardList = [...savedCards];
+    cardList.push(<Card
+      cardName={ cardName }
+      cardDescription={ description }
+      cardAttr1={ Number(attr1) }
+      cardAttr2={ Number(attr2) }
+      cardAttr3={ Number(attr3) }
+      cardImage={ imgsrc }
+      cardRare={ rare }
+      cardTrunfo={ trunfo }
+    />);
+    this.setState({
+      cardName: '',
+      description: '',
+      attr1: 0,
+      attr2: 0,
+      attr3: 0,
+      imgsrc: '',
+      rare: 'normal',
+      trunfo: false,
+      savedCards: cardList,
+    });
   };
 
   render() {
@@ -63,16 +94,18 @@ class App extends React.Component {
         rare,
         trunfo,
         hasTrunfo,
-        isSaveButtonDisabled } } = this;
+        isSaveButtonDisabled,
+        savedCards,
+      } } = this;
     return (
       <div>
         <h1>Tryunfo</h1>
         <Form
           cardName={ cardName }
           cardDescription={ description }
-          cardAttr1={ attr1 }
-          cardAttr2={ attr2 }
-          cardAttr3={ attr3 }
+          cardAttr1={ Number(attr1) }
+          cardAttr2={ Number(attr2) }
+          cardAttr3={ Number(attr3) }
           cardImage={ imgsrc }
           cardRare={ rare }
           cardTrunfo={ trunfo }
@@ -84,13 +117,14 @@ class App extends React.Component {
         <Card
           cardName={ cardName }
           cardDescription={ description }
-          cardAttr1={ attr1 }
-          cardAttr2={ attr2 }
-          cardAttr3={ attr3 }
+          cardAttr1={ Number(attr1) }
+          cardAttr2={ Number(attr2) }
+          cardAttr3={ Number(attr3) }
           cardImage={ imgsrc }
           cardRare={ rare }
           cardTrunfo={ trunfo }
         />
+        {savedCards}
       </div>
     );
   }

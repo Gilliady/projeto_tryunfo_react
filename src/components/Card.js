@@ -22,9 +22,9 @@ class Card extends Component {
         <h3 data-testid="name-card">{ cardName }</h3>
         <img src={ cardImage } alt={ cardName } data-testid="image-card" />
         <p data-testid="description-card">{ cardDescription }</p>
-        <span data-testid="attr1-card">{ cardAttr1 }</span>
-        <span data-testid="attr2-card">{ cardAttr2 }</span>
-        <span data-testid="attr3-card">{ cardAttr3 }</span>
+        <span data-testid="attr1-card">{ Number(cardAttr1) }</span>
+        <span data-testid="attr2-card">{ Number(cardAttr2) }</span>
+        <span data-testid="attr3-card">{ Number(cardAttr3) }</span>
         <h3 data-testid="rare-card">{ cardRare }</h3>
         { superTrunfo }
       </div>
@@ -33,9 +33,9 @@ class Card extends Component {
 }
 
 Card.propTypes = {
-  cardAttr1: PropTypes.string.isRequired,
-  cardAttr2: PropTypes.string.isRequired,
-  cardAttr3: PropTypes.string.isRequired,
+  cardAttr1: PropTypes.number.isRequired,
+  cardAttr2: PropTypes.number.isRequired,
+  cardAttr3: PropTypes.number.isRequired,
   cardDescription: PropTypes.string.isRequired,
   cardImage: PropTypes.string.isRequired,
   cardName: PropTypes.string.isRequired,

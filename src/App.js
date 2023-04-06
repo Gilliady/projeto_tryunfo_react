@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
+import CardDeck from './components/CardDeck';
 
 class App extends React.Component {
   state = {
@@ -35,60 +36,61 @@ class App extends React.Component {
     });
   };
 
+  removeCard = ({ target }) => {
+    this.setState((previous) => ({
+      savedCards: previous.savedCards.filter((card) => card.cardName
+        !== target.parentNode.firstChild.innerHTML),
+    }), this.hasTrunfoInDeck);
+  };
+
   hasTrunfoInDeck = () => {
     const { state: { savedCards } } = this;
-    console.log(savedCards);
     this.setState({
-      hasTrunfo: savedCards.some(({ props }) => props.cardTrunfo),
+      hasTrunfo: savedCards.some(({ cardTrunfo }) => cardTrunfo),
     });
   };
 
   onInputChange = ({ target }) => {
     this.hasTrunfoInDeck();
-    if (target.name === 'trunfo') {
-      this.setState({
-        [target.name]: target.checked,
-      }, this.buttonDisableHanlder);
-      return;
-    }
     this.setState({
-      [target.name]: target.value,
+      [target.name]: target.name === 'trunfo' ? target.checked : target.value,
     }, this.buttonDisableHanlder);
   };
 
   onSaveButtonClick = () => {
-    const { state: { cardName,
-      description,
-      attr1,
-      attr2,
-      attr3,
-      imgsrc,
-      rare,
-      trunfo,
-      savedCards,
-    } } = this;
-    const cardList = [...savedCards];
-    cardList.push(<Card
-      cardName={ cardName }
-      cardDescription={ description }
-      cardAttr1={ Number(attr1) }
-      cardAttr2={ Number(attr2) }
-      cardAttr3={ Number(attr3) }
-      cardImage={ imgsrc }
-      cardRare={ rare }
-      cardTrunfo={ trunfo }
-      key={ cardName }
-    />);
-    this.setState({
-      cardName: '',
-      description: '',
-      attr1: 0,
-      attr2: 0,
-      attr3: 0,
-      imgsrc: '',
-      rare: 'normal',
-      trunfo: false,
-      savedCards: cardList,
+    this.setState((previous) => {
+      const cardList = [...previous.savedCards];
+      const { cardName,
+        description,
+        attr1,
+        attr2,
+        attr3,
+        imgsrc,
+        rare,
+        trunfo,
+      } = previous;
+      cardList.push({
+        cardName,
+        cardDescription: description,
+        cardAttr1: Number(attr1),
+        cardAttr2: Number(attr2),
+        cardAttr3: Number(attr3),
+        cardImage: imgsrc,
+        cardRare: rare,
+        cardTrunfo: trunfo,
+        removeCard: this.removeCard,
+      });
+      return {
+        cardName: '',
+        description: '',
+        attr1: 0,
+        attr2: 0,
+        attr3: 0,
+        imgsrc: '',
+        rare: 'normal',
+        trunfo: false,
+        savedCards: cardList,
+      };
     }, () => { this.buttonDisableHanlder(); this.hasTrunfoInDeck(); });
   };
 
@@ -134,7 +136,7 @@ class App extends React.Component {
           cardRare={ rare }
           cardTrunfo={ trunfo }
         />
-        {savedCards}
+        { savedCards.map((card) => <CardDeck key={ card.name } { ...card } />) }
       </div>
     );
   }

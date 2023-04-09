@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 
 class Input extends Component {
   render() {
-    const { type, name, value, id, handler, placeHolder } = this.props;
+    const { className, type, name, value, id, handler, placeHolder } = this.props;
     return (
       <input
+        className={ className }
         type={ type }
         name={ name }
         value={ value }
@@ -26,10 +27,12 @@ Input.propTypes = {
   id: PropTypes.string.isRequired,
   handler: PropTypes.func.isRequired,
   placeHolder: PropTypes.string,
+  className: PropTypes.string,
 };
 
 Input.defaultProps = {
   placeHolder: '',
+  className: '',
 };
 
 export default Input;

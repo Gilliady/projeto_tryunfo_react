@@ -19,6 +19,7 @@ class App extends React.Component {
     savedCards: [],
     filterName: '',
     filterRarity: 'todas',
+    trunfoFilter: false,
   };
 
   buttonDisableHanlder = () => {
@@ -56,8 +57,29 @@ class App extends React.Component {
   onInputChange = ({ target }) => {
     this.hasTrunfoInDeck();
     this.setState({
-      [target.name]: target.name === 'trunfo' ? target.checked : target.value,
+      [target.name]: target.type === 'checkbox' ? target.checked : target.value,
     }, this.buttonDisableHanlder);
+  };
+
+  renderCards = (savedCards) => {
+    const { state: { filterName, filterRarity, trunfoFilter } } = this;
+    return savedCards.map((card) => (<CardDeck
+      key={ card.cardName }
+      { ...card }
+    />)).filter((card) => {
+      if (filterName.length > 0) {
+        return card.props.cardName.includes(filterName);
+      }
+      return card;
+    }).filter((card) => (filterRarity !== 'todas'
+      ? card.props.cardRare === filterRarity : card))
+      .filter((card) => {
+        if (trunfoFilter) {
+          console.log(card);
+          return card.props.cardTrunfo;
+        }
+        return card;
+      });
   };
 
   onSaveButtonClick = () => {
@@ -110,6 +132,7 @@ class App extends React.Component {
         savedCards,
         filterName,
         filterRarity,
+        trunfoFilter,
       } } = this;
     return (
       <div>
@@ -146,6 +169,7 @@ class App extends React.Component {
             handler={ this.onInputChange }
             value={ filterName }
             id="name-filter"
+            className="filter"
             placeHolder="Pesquise por nome"
           />
           <select
@@ -153,26 +177,33 @@ class App extends React.Component {
             name="filterRarity"
             value={ filterRarity }
             onChange={ this.onInputChange }
+            className="filter"
           >
             <option value="todas">todas</option>
             <option value="normal">normal</option>
             <option value="raro">raro</option>
             <option value="muito raro">muito raro</option>
           </select>
-          { savedCards.map((card) => (<CardDeck
-            key={ card.cardName }
-            { ...card }
-          />)).filter((card) => {
-            if (filterName.length > 0) {
-              return card.props.cardName.includes(filterName);
-            }
-            return card;
-          }).filter((card) => {
-            if (filterRarity !== 'todas') {
-              return card.props.cardRare === filterRarity;
-            }
-            return card;
-          }) }
+          <label htmlFor="trunfo-filter" data-testid="trunfo-filter">
+            Super Trunfo
+            <input
+              type="checkbox"
+              id="trunfo-filter"
+              name="trunfoFilter"
+              checked={ trunfoFilter }
+              onChange={ (evt) => {
+                document.querySelectorAll('.filter').forEach((filter) => {
+                  this.setState({
+                    filterRarity: 'todas',
+                    filterName: '',
+                  });
+                  filter.disabled = !trunfoFilter;
+                });
+                this.onInputChange(evt);
+              } }
+            />
+          </label>
+          { this.renderCards(savedCards) }
         </fieldset>
       </div>
     );

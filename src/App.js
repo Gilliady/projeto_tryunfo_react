@@ -1,7 +1,6 @@
 import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
-import CardDeck from './components/CardDeck';
 import Input from './components/Input';
 
 class App extends React.Component {
@@ -41,9 +40,10 @@ class App extends React.Component {
   };
 
   removeCard = ({ target }) => {
+    console.log(target.id);
     this.setState((previous) => ({
-      savedCards: previous.savedCards.filter((card) => card.cardName
-        !== target.id),
+      savedCards: previous.savedCards.filter((_card, index) => index
+        !== Number(target.id)),
     }), this.hasTrunfoInDeck);
   };
 
@@ -63,9 +63,10 @@ class App extends React.Component {
 
   renderCards = (savedCards) => {
     const { state: { filterName, filterRarity, trunfoFilter } } = this;
-    return savedCards.map((card) => (<CardDeck
-      key={ card.cardName }
+    return savedCards.map((card, index) => (<Card
+      key={ index }
       { ...card }
+      index={ index }
     />)).filter((card) => {
       if (filterName.length > 0) {
         return card.props.cardName.includes(filterName);
@@ -160,6 +161,7 @@ class App extends React.Component {
           cardImage={ imgsrc }
           cardRare={ rare }
           cardTrunfo={ trunfo }
+          isPreview
         />
         <fieldset>
           <legend>Deck</legend>

@@ -15,6 +15,9 @@ class Card extends Component {
       cardImage,
       cardRare,
       cardTrunfo,
+      isPreview,
+      removeCard,
+      index,
     } = this.props;
 
     return (
@@ -27,6 +30,16 @@ class Card extends Component {
         <span data-testid="attr3-card">{ Number(cardAttr3) }</span>
         <h3 data-testid="rare-card">{ cardRare }</h3>
         { this.trunfo(cardTrunfo) }
+        { !isPreview
+          && (
+            <button
+              data-testid="delete-button"
+              id={ index }
+              onClick={ removeCard }
+            >
+              Excluir
+            </button>
+          )}
       </div>
     );
   }
@@ -41,10 +54,16 @@ Card.propTypes = {
   cardName: PropTypes.string.isRequired,
   cardRare: PropTypes.string.isRequired,
   cardTrunfo: PropTypes.bool,
+  isPreview: PropTypes.bool,
+  removeCard: PropTypes.func,
+  index: PropTypes.number,
 };
 
 Card.defaultProps = {
   cardTrunfo: false,
+  isPreview: false,
+  removeCard: undefined,
+  index: undefined,
 };
 
 export default Card;

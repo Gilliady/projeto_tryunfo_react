@@ -21,14 +21,24 @@ class CardDeck extends Component {
     return (
       <div>
         <h3 data-testid="name-card">{ cardName }</h3>
-        <img src={ cardImage } alt={ cardName } data-testid="image-card" />
+        <img
+          src={ cardImage }
+          alt={ cardName }
+          data-testid="image-card"
+        />
         <p data-testid="description-card">{ cardDescription }</p>
         <span data-testid="attr1-card">{ Number(cardAttr1) }</span>
         <span data-testid="attr2-card">{ Number(cardAttr2) }</span>
         <span data-testid="attr3-card">{ Number(cardAttr3) }</span>
         <h3 data-testid="rare-card">{ cardRare }</h3>
         { this.trunfo(cardTrunfo) }
-        <button data-testid="delete-button" onClick={ removeCard }>Excluir</button>
+        <button
+          data-testid="delete-button"
+          id={ cardName }
+          onClick={ removeCard }
+        >
+          Excluir
+        </button>
       </div>
     );
   }

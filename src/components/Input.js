@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 class Input extends Component {
   render() {
-    const { type, name, value, id, handler } = this.props;
+    const { type, name, value, id, handler, placeHolder } = this.props;
     return (
       <input
         type={ type }
@@ -12,6 +12,7 @@ class Input extends Component {
         onChange={ handler }
         id={ id }
         data-testid={ id }
+        placeholder={ placeHolder }
       />
     );
   }
@@ -24,6 +25,11 @@ Input.propTypes = {
     .oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]).isRequired,
   id: PropTypes.string.isRequired,
   handler: PropTypes.func.isRequired,
+  placeHolder: PropTypes.string,
+};
+
+Input.defaultProps = {
+  placeHolder: '',
 };
 
 export default Input;

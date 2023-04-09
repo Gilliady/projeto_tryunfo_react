@@ -2,6 +2,7 @@ import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
 import CardDeck from './components/CardDeck';
+import Input from './components/Input';
 
 class App extends React.Component {
   state = {
@@ -16,6 +17,8 @@ class App extends React.Component {
     hasTrunfo: false,
     isSaveButtonDisabled: true,
     savedCards: [],
+    filterName: '',
+    filterRarity: 'todas',
   };
 
   buttonDisableHanlder = () => {
@@ -39,7 +42,7 @@ class App extends React.Component {
   removeCard = ({ target }) => {
     this.setState((previous) => ({
       savedCards: previous.savedCards.filter((card) => card.cardName
-        !== target.parentNode.firstChild.innerHTML),
+        !== target.id),
     }), this.hasTrunfoInDeck);
   };
 
@@ -69,17 +72,6 @@ class App extends React.Component {
         rare,
         trunfo,
       } = previous;
-      cardList.push({
-        cardName,
-        cardDescription: description,
-        cardAttr1: Number(attr1),
-        cardAttr2: Number(attr2),
-        cardAttr3: Number(attr3),
-        cardImage: imgsrc,
-        cardRare: rare,
-        cardTrunfo: trunfo,
-        removeCard: this.removeCard,
-      });
       return {
         cardName: '',
         description: '',
@@ -89,7 +81,15 @@ class App extends React.Component {
         imgsrc: '',
         rare: 'normal',
         trunfo: false,
-        savedCards: cardList,
+        savedCards: [...cardList, { cardName,
+          cardDescription: description,
+          cardAttr1: Number(attr1),
+          cardAttr2: Number(attr2),
+          cardAttr3: Number(attr3),
+          cardImage: imgsrc,
+          cardRare: rare,
+          cardTrunfo: trunfo,
+          removeCard: this.removeCard }],
       };
     }, () => { this.buttonDisableHanlder(); this.hasTrunfoInDeck(); });
   };
@@ -108,6 +108,8 @@ class App extends React.Component {
         hasTrunfo,
         isSaveButtonDisabled,
         savedCards,
+        filterName,
+        filterRarity,
       } } = this;
     return (
       <div>
@@ -136,7 +138,42 @@ class App extends React.Component {
           cardRare={ rare }
           cardTrunfo={ trunfo }
         />
-        { savedCards.map((card) => <CardDeck key={ card.name } { ...card } />) }
+        <fieldset>
+          <legend>Deck</legend>
+          <Input
+            type="text"
+            name="filterName"
+            handler={ this.onInputChange }
+            value={ filterName }
+            id="name-filter"
+            placeHolder="Pesquise por nome"
+          />
+          <select
+            data-testid="rare-filter"
+            name="filterRarity"
+            value={ filterRarity }
+            onChange={ this.onInputChange }
+          >
+            <option value="todas">todas</option>
+            <option value="normal">normal</option>
+            <option value="raro">raro</option>
+            <option value="muito raro">muito raro</option>
+          </select>
+          { savedCards.map((card) => (<CardDeck
+            key={ card.cardName }
+            { ...card }
+          />)).filter((card) => {
+            if (filterName.length > 0) {
+              return card.props.cardName.includes(filterName);
+            }
+            return card;
+          }).filter((card) => {
+            if (filterRarity !== 'todas') {
+              return card.props.cardRare === filterRarity;
+            }
+            return card;
+          }) }
+        </fieldset>
       </div>
     );
   }
